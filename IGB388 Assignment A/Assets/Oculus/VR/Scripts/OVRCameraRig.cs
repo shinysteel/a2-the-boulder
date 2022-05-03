@@ -10,7 +10,7 @@ ANY KIND, either express or implied. See the License for the specific language g
 permissions and limitations under the License.
 ************************************************************************************/
 
-#if USING_XR_MANAGEMENT && USING_XR_SDK_OCULUS
+#if USING_XR_MANAGEMENT && (USING_XR_SDK_OCULUS || USING_XR_SDK_OPENXR)
 #define USING_XR_SDK
 #endif
 
@@ -265,8 +265,9 @@ public class OVRCameraRig : MonoBehaviour
 
 #if USING_XR_SDK
 #if UNITY_2020_3_OR_NEWER
-		if (OVRManager.instance.LateLatching)
+		/*if (OVRManager.instance.LateLatching)
 		{
+
 			XRDisplaySubsystem displaySubsystem = OVRManager.GetCurrentDisplaySubsystem();
 			if (displaySubsystem != null)
 			{
@@ -274,7 +275,7 @@ public class OVRCameraRig : MonoBehaviour
 				displaySubsystem.MarkTransformLateLatched(leftHandAnchor, XRDisplaySubsystem.LateLatchNode.LeftHand);
 				displaySubsystem.MarkTransformLateLatched(rightHandAnchor, XRDisplaySubsystem.LateLatchNode.RightHand);
 			}
-		}
+		}*/
 #endif
 #endif
 		RaiseUpdatedAnchorsEvent();
