@@ -21,6 +21,5 @@ public class JoystickLocomotion : MonoBehaviour
         
         player.position += (transform.right * joystickAxis.x + transform.forward * joystickAxis.y) * Time.deltaTime * speed;
         player.position = new Vector3(player.position.x,fixedY, player.position.z);
-        
     }
 }
