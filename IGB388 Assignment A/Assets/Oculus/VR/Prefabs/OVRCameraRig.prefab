@@ -415,8 +415,6 @@ GameObject:
   - component: {fileID: 482130}
   - component: {fileID: 1506624256}
   - component: {fileID: 1506624257}
-  - component: {fileID: 1506624262}
-  - component: {fileID: 1506624258}
   m_Layer: 0
   m_Name: LeftHandAnchor
   m_TagString: Untagged
@@ -469,34 +467,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1506624262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 106b2e0a07e38554fa6da5ffc4054d63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 1506624260}
-  speed: 2
---- !u!114 &1506624258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b53e3f44f11df514f9630883d81baf2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  climber: {fileID: 1506624261}
-  controller: 0
 --- !u!1 &113768
 GameObject:
   m_ObjectHideFlags: 0
