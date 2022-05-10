@@ -1525,11 +1525,11 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
 		string logString = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(message, size);
 		if (logLevel <= OVRPlugin.LogLevel.Info)
 		{
-			UnityEngine.Debug.Log("[OVRPlugin] " + logString);
+			//UnityEngine.Debug.Log("[OVRPlugin] " + logString);
 		}
 		else
 		{
-			UnityEngine.Debug.LogWarning("[OVRPlugin] " + logString);
+			//UnityEngine.Debug.LogWarning("[OVRPlugin] " + logString);
 		}
 	}
 #endif
@@ -1552,16 +1552,16 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
 		// uncomment the following line to disable the callstack printed to log
 		//Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);  // TEMPORARY
 
-		Debug.Log("Unity v" + Application.unityVersion + ", " +
-				"Oculus Utilities v" + OVRPlugin.wrapperVersion + ", " +
-				"OVRPlugin v" + OVRPlugin.version + ", " +
-				"SDK v" + OVRPlugin.nativeSDKVersion + ".");
+		//Debug.Log("Unity v" + Application.unityVersion + ", " +
+		//		"Oculus Utilities v" + OVRPlugin.wrapperVersion + ", " +
+		//		"OVRPlugin v" + OVRPlugin.version + ", " +
+		//		"SDK v" + OVRPlugin.nativeSDKVersion + ".");
 
-		Debug.LogFormat("SystemHeadset {0}, API {1}", systemHeadsetType.ToString(), xrApi.ToString());
+		//Debug.LogFormat("SystemHeadset {0}, API {1}", systemHeadsetType.ToString(), xrApi.ToString());
 
 		if (xrApi == XrApi.OpenXR)
 		{
-			Debug.LogFormat("OpenXR instance 0x{0:X} session 0x{1:X}", xrInstance, xrSession);
+			//Debug.LogFormat("OpenXR instance 0x{0:X} session 0x{1:X}", xrInstance, xrSession);
 		}
 
 #if !UNITY_EDITOR
@@ -1663,8 +1663,8 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
 
 		Initialize();
 
-		Debug.LogFormat("Current display frequency {0}, available frequencies [{1}]",
-			display.displayFrequency, string.Join(", ", display.displayFrequenciesAvailable.Select(f => f.ToString()).ToArray()));
+		//Debug.LogFormat("Current display frequency {0}, available frequencies [{1}]",
+		//	display.displayFrequency, string.Join(", ", display.displayFrequenciesAvailable.Select(f => f.ToString()).ToArray()));
 
 		if (resetTrackerOnLoad)
 			display.RecenterPose();
@@ -1866,9 +1866,9 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
 
 		if (useRecommendedMSAALevel && QualitySettings.antiAliasing != display.recommendedMSAALevel)
 		{
-			Debug.Log("The current MSAA level is " + QualitySettings.antiAliasing +
-			", but the recommended MSAA level is " + display.recommendedMSAALevel +
-			". Switching to the recommended level.");
+			//Debug.Log("The current MSAA level is " + QualitySettings.antiAliasing +
+			//", but the recommended MSAA level is " + display.recommendedMSAALevel +
+			//". Switching to the recommended level.");
 
 			QualitySettings.antiAliasing = display.recommendedMSAALevel;
 		}
