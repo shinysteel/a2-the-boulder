@@ -76,14 +76,14 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 1
     - _HighIntensity: 1.5
-    - _LightScalar: 1
-    - _LowIntensity: 1
+    - _LightScalar: 1.8
+    - _LowIntensity: 2
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OutlineSize: 0
     - _Parallax: 0.02
-    - _RampLevels: 2
+    - _RampLevels: 12
     - _RimAlpha: 0
     - _RimDropOff: 0
     - _RimPower: 0
