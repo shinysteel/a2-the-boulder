@@ -13,5 +13,7 @@ namespace Assignment
             if (Singleton == null)
                 Singleton = this;
         }
+
+        public GameObject Player;
     }
 }

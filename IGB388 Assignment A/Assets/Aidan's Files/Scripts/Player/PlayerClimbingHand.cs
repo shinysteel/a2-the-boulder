@@ -16,8 +16,8 @@ namespace Assignment
         private float stamina = 100f;
         private const float MAX_STAMINA = 100f;
         private const float STAMINA_COST_TO_GRAB = 10f;
-        private const float STAMINA_DEPLETION_RATE = 5f; // /s
-        private const float STAMINA_REGENERATION_RATE = 10f;
+        private const float STAMINA_DEPLETION_RATE = 1.5f; // /s
+        private const float STAMINA_REGENERATION_RATE = 15f;
         public RectTransform staminaFillOriginRT;
 
         private void OnTriggerEnter(Collider other)
