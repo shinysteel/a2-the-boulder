@@ -47,7 +47,7 @@ namespace Assignment
         public Action<PlayerClimbing.eHandType> onRelease_ClimbObject;
         private bool isGrabbingClimbObject = false;
 
-        private void Update()
+        void Update()
         {
             bool isHandTriggerPressed = handType == PlayerClimbing.eHandType.Left
                 ? OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger)
@@ -74,9 +74,23 @@ namespace Assignment
             HandleStamina();
         }
 
+        void OnCollisionEnter(Collision collision)
+        {
+            //These variables should be defined at top in some way
+            bool isHandTriggerPressed = handType == PlayerClimbing.eHandType.Left
+                ? OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger)
+                : OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger);
+
+            if (isHandTriggerPressed && collision.gameObject.CompareTag("Zipline"))
+            {
+                //Starts the ziplining action
+                GameObject.FindGameObjectWithTag("Zipline").GetComponent<Zipline>().Ziplining();
+            }
+        }
+
         // Iterates through memory and returns the closest
         // climb object to the hand.
-        private GameObject GetClosestClimbObject()
+        GameObject GetClosestClimbObject()
         {
             if (memory.Count <= 0)
                 return null;
