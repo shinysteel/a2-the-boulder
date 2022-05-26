@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assignment
 {
@@ -18,7 +19,10 @@ namespace Assignment
         private const float STAMINA_COST_TO_GRAB = 10f;
         private const float STAMINA_DEPLETION_RATE = 1.5f; // /s
         private const float STAMINA_REGENERATION_RATE = 15f;
-        public RectTransform staminaFillOriginRT;
+        //public RectTransform staminaFillOriginRT;
+
+        public Slider stamina_slider;
+        public Image stamina_bar;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -42,7 +46,8 @@ namespace Assignment
         public Action<PlayerClimbing.eHandType, GameObject> onGrab_ClimbObject;
         public Action<PlayerClimbing.eHandType> onRelease_ClimbObject;
         private bool isGrabbingClimbObject = false;
-        private void Update()
+
+        void Update()
         {
             bool isHandTriggerPressed = handType == PlayerClimbing.eHandType.Left
                 ? OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger)
@@ -69,9 +74,23 @@ namespace Assignment
             HandleStamina();
         }
 
+        void OnCollisionEnter(Collision collision)
+        {
+            //These variables should be defined at top in some way
+            bool isHandTriggerPressed = handType == PlayerClimbing.eHandType.Left
+                ? OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger)
+                : OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger);
+
+            if (isHandTriggerPressed && collision.gameObject.CompareTag("Zipline"))
+            {
+                //Starts the ziplining action
+                GameObject.FindGameObjectWithTag("Zipline").GetComponent<Zipline>().Ziplining();
+            }
+        }
+
         // Iterates through memory and returns the closest
         // climb object to the hand.
-        private GameObject GetClosestClimbObject()
+        GameObject GetClosestClimbObject()
         {
             if (memory.Count <= 0)
                 return null;
@@ -97,13 +116,39 @@ namespace Assignment
                 isGrabbingClimbObject = false;
                 onRelease_ClimbObject(handType);
             }
+
             if (isGrabbingClimbObject)
+            {
                 stamina -= STAMINA_DEPLETION_RATE * Time.deltaTime;
+            }
+
             else
+            {
                 stamina = Mathf.Clamp(stamina + STAMINA_REGENERATION_RATE * Time.deltaTime, stamina, MAX_STAMINA);
+            }
+
+            stamina_slider.GetComponent<Slider>().value = stamina;
+
+            // Handle colour visuals of grabbing
+            if (stamina < MAX_STAMINA * 0.25)
+            {
+                stamina_bar.color = Color.red;
+            }
+
+            else if (stamina < MAX_STAMINA * 0.6)
+            {
+                stamina_bar.color = Color.yellow;
+            }
+
+            else
+            {
+                stamina_bar.color = Color.green;
+            }
+
+            
             // Stamina visuals.
-            float staminaRatio = stamina / MAX_STAMINA;
-            staminaFillOriginRT.localScale = new Vector3(staminaFillOriginRT.localScale.x + 0.1f * (staminaRatio - staminaFillOriginRT.localScale.x), 1f, 1f);
+            //float staminaRatio = stamina / MAX_STAMINA;
+            //staminaFillOriginRT.localScale = new Vector3(staminaFillOriginRT.localScale.x + 0.1f * (staminaRatio - staminaFillOriginRT.localScale.x), 1f, 1f);
         }
 
 
@@ -113,6 +158,15 @@ namespace Assignment
 
         private void Start()
         {
+            // Set max stamina to slider
+            stamina_slider.GetComponent<Slider>().maxValue = MAX_STAMINA;
+
+            // Set current value of slider to stamina value
+            stamina_slider.GetComponent<Slider>().value = stamina;
+
+            // Set current value of slider to stamina value
+            stamina_bar.color = Color.green;
+
             counterText.gameObject.SetActive(debug);
         }
         private void FixedUpdate()
