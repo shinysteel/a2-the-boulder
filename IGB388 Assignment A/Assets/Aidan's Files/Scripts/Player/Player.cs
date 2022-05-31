@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assignment
 {
@@ -26,9 +27,15 @@ namespace Assignment
         public float health_regen = 1f;
         bool regen = false;
 
-        //Respawn locations
+        //Respawn components for handling teleporting and saving checkpoints
         public Transform respawn_location;
-        public Transform start_location;
+        bool respawning = false;
+
+        //HUD color handling
+        public Color fade_to_black;
+        public Color start;
+        public Color end;
+        public Color red_outline;
 
         void Start()
         {
@@ -54,9 +61,9 @@ namespace Assignment
             {
                 TakeDamage();
 
-                if (current_health <= 0)
+                if (current_health <= 0 && !respawning)
                 {
-                    Respawn();
+                    StartCoroutine(Respawn(2));
                 }
             }
 
@@ -67,6 +74,12 @@ namespace Assignment
             if (!regen)
             {
                 StartCoroutine(RegenHealth());
+            }
+
+            //Adjust the alpha of red outline based on missing health
+            if (current_health >= 0)
+            {
+                red_outline.a = (max_health - current_health) / max_health;
             }
         }
 
@@ -114,13 +127,45 @@ namespace Assignment
             regen = false;
         }
 
-        void Respawn()
+        IEnumerator Respawn(float duration)
         {
+            respawning = true;
+
+            //Disable movement while teleporting
+            movement.enabled = false;
+            climbing.enabled = false;
+
+            //Fade to black
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                float normalized_time = t / duration;
+                fade_to_black = Color.Lerp(start, end, normalized_time);
+
+                yield return new WaitForSeconds(duration);
+            }
+
+            fade_to_black = end;
+
             //Restore all health to the player
             current_health = max_health;
 
             //Teleport player to the save points throughout the map
             transform.position = respawn_location.position;
+
+            //Fade out of black
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                float normalized_time = t / duration;
+                fade_to_black = Color.Lerp(end, start, normalized_time);
+
+                yield return new WaitForSeconds(duration);
+            }
+
+            //Re-enable movement after teleporting
+            movement.enabled = true;
+            climbing.enabled = true;
+
+            respawning = false;
         }
     }
 }
