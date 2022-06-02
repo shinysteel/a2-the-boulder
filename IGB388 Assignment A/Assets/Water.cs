@@ -11,20 +11,20 @@ public class Water : MonoBehaviour
     public Transform spawn_location_a;
     public Transform spawn_location_b;
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             //If zipline has been used
             if (zipline.finished_zipline)
             {
-                collision.gameObject.transform.position = spawn_location_b.position;
+                other.gameObject.transform.position = spawn_location_b.position;
             }
 
             //If zipline has not been used
             else
             {
-                collision.gameObject.transform.position = spawn_location_a.position;
+                other.gameObject.transform.position = spawn_location_a.position;
             }
         }
     }
