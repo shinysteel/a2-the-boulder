@@ -74,14 +74,15 @@ namespace Assignment
             HandleStamina();
         }
 
-        void OnCollisionEnter(Collision collision)
+        void OnTriggerStay(Collider other)
         {
+            if (other.gameObject.tag != "Zipline")
+                return;
             //These variables should be defined at top in some way
             bool isHandTriggerPressed = handType == PlayerClimbing.eHandType.Left
                 ? OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger)
                 : OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger);
-
-            if (isHandTriggerPressed && collision.gameObject.CompareTag("Zipline"))
+            if (isHandTriggerPressed)
             {
                 //Starts the ziplining action
                 GameObject.FindGameObjectWithTag("Zipline").GetComponent<Zipline>().Ziplining();

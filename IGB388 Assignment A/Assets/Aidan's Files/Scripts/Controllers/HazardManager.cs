@@ -20,18 +20,10 @@ namespace Assignment
         public GameObject hazardDebugVisual;
 
         [Header("UI References")]
-        public RectTransform upIndicatorRT;
-        public RectTransform leftIndicatorRT;
-        public RectTransform downIndicatorRT;
-        public RectTransform rightIndicatorRT;
-
-        private const float SIDEHEIGHT_WITHOUT_UPORDOWN = 450f;
-        private const float SIDEHEIGHT_WITH_UPANDDOWN = 220f;
-        private const float SIDEHEIGHT_WITH_UPXORDOWN = 425f; // XOR = exclusive OR. 
-        private const float SIDEYOFFSET_WITH_UPANDDOWN = 0f;
-        private const float SIDEYOFFSET_WITHOUT_UPANDDOWN = 0f;
-        private const float SIDEYOFFSET_WITH_UP = -100f;
-        private const float SIDEYOFFSET_WITH_DOWN = 100f;
+        public GameObject upIndicatorGO;
+        public GameObject leftIndicatorGO;
+        public GameObject downIndicatorGO;
+        public GameObject rightIndicatorGO;
 
         private void Update()
         {
@@ -39,6 +31,10 @@ namespace Assignment
             {
                 showHazards = !showHazards;
                 hazardDebugVisual.SetActive(!hazardDebugVisual.activeSelf);
+                upIndicatorGO.SetActive(showHazards);
+                downIndicatorGO.SetActive(showHazards);
+                leftIndicatorGO.SetActive(showHazards);
+                rightIndicatorGO.SetActive(showHazards);
             }
             if (!showHazards)
                 return;
@@ -62,33 +58,10 @@ namespace Assignment
             bool isLeftIndicatorOn = xAngleDif >= minDif;
             bool isRightIndicatorOn = xAngleDif <= -minDif;
 
-            upIndicatorRT.gameObject.SetActive(isUpIndicatorOn ? true : false);
-            downIndicatorRT.gameObject.SetActive(isDownIndicatorOn ? true : false);
-            leftIndicatorRT.gameObject.SetActive(isLeftIndicatorOn ? true : false);
-            rightIndicatorRT.gameObject.SetActive(isRightIndicatorOn ? true : false);
-
-            // Adjusting side indicators to not overlap with vertical borders (height and yoffset).
-            if (isUpIndicatorOn && isDownIndicatorOn)
-            {
-                ChangeHeightAndYOffset(leftIndicatorRT, SIDEHEIGHT_WITH_UPANDDOWN, SIDEYOFFSET_WITH_UPANDDOWN);
-                ChangeHeightAndYOffset(rightIndicatorRT, SIDEHEIGHT_WITH_UPANDDOWN, SIDEYOFFSET_WITH_UPANDDOWN);
-            } 
-            else if (isUpIndicatorOn ^ isDownIndicatorOn) 
-            {
-                ChangeHeightAndYOffset(leftIndicatorRT, SIDEHEIGHT_WITH_UPXORDOWN, (isUpIndicatorOn && !isDownIndicatorOn) ? SIDEYOFFSET_WITH_UP : SIDEYOFFSET_WITH_DOWN);
-                ChangeHeightAndYOffset(rightIndicatorRT, SIDEHEIGHT_WITH_UPXORDOWN, (isUpIndicatorOn && !isDownIndicatorOn) ? SIDEYOFFSET_WITH_UP : SIDEYOFFSET_WITH_DOWN);
-            }
-            else // Case: both and down are off. 
-            {
-                ChangeHeightAndYOffset(leftIndicatorRT, SIDEHEIGHT_WITHOUT_UPORDOWN, SIDEYOFFSET_WITHOUT_UPANDDOWN);
-                ChangeHeightAndYOffset(rightIndicatorRT, SIDEHEIGHT_WITHOUT_UPORDOWN, SIDEYOFFSET_WITHOUT_UPANDDOWN);
-            }
-        }
-
-        private void ChangeHeightAndYOffset(RectTransform rt, float newHeight, float newYOffset)
-        {
-            rt.sizeDelta = new Vector2(rt.sizeDelta.x, newHeight);
-            rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, newYOffset);
+            upIndicatorGO.SetActive(isUpIndicatorOn ? true : false);
+            downIndicatorGO.SetActive(isDownIndicatorOn ? true : false);
+            leftIndicatorGO.SetActive(isLeftIndicatorOn ? true : false);
+            rightIndicatorGO.SetActive(isRightIndicatorOn ? true : false);
         }
 
         private enum eAxis { X, Y };

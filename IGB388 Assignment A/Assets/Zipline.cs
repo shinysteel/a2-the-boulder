@@ -11,7 +11,7 @@ public class Zipline : MonoBehaviour
     GameObject player;
 
     //Variables to determine speed and distance travelled
-    public float speed = 1f;
+    public float speed = 1.5f;
     float start_time;
     float journey_length;
 
@@ -28,6 +28,9 @@ public class Zipline : MonoBehaviour
 
     void Update()
     {
+        if (finished_zipline)
+            return;
+
         if (ziplining)
         {
             //Distance moved equals elapsed time times speed..
@@ -40,7 +43,7 @@ public class Zipline : MonoBehaviour
             player.transform.position = Vector3.Lerp(start_location.position, end_location.position, distance_ratio);
 
             //Stop ziplining once player has reached end_location
-            if (distance_ratio == 1)
+            if (distance_ratio >= 1)
             {
                 //Disable ziplining event
                 ziplining = false;
