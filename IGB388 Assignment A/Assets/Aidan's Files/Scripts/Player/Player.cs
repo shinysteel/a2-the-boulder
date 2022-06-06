@@ -127,7 +127,7 @@ namespace Assignment
             regen = false;
         }
 
-        IEnumerator Respawn(float duration)
+        public IEnumerator Respawn(float duration)
         {
             respawning = true;
 
