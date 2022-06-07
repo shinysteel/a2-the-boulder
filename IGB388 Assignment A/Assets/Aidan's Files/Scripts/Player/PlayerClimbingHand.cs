@@ -23,6 +23,8 @@ namespace Assignment
 
         public Slider stamina_slider;
         public Image stamina_bar;
+        public bool getting_tired = false;
+        public AudioSource tired;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -134,11 +136,18 @@ namespace Assignment
             if (stamina < MAX_STAMINA * 0.25)
             {
                 stamina_bar.color = Color.red;
+
+                if (!getting_tired)
+                {
+                    tired.Play();
+                    getting_tired = true;
+                }
             }
 
             else if (stamina < MAX_STAMINA * 0.6)
             {
                 stamina_bar.color = Color.yellow;
+                getting_tired = false;
             }
 
             else

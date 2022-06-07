@@ -37,6 +37,13 @@ namespace Assignment
         public Color end;
         public Color red_outline;
 
+        //Boolean check for walking
+        private bool is_walking;
+        private string foot = "left";
+        public AudioSource left_foot;
+        public AudioSource right_foot;
+        public AudioSource land;
+
         void Start()
         {
             movement = GetComponent<PlayerMovement>();
@@ -81,6 +88,8 @@ namespace Assignment
             {
                 red_outline.a = (max_health - current_health) / max_health;
             }
+
+            CheckWalking();
         }
 
         void OnClimbStart()
@@ -108,6 +117,8 @@ namespace Assignment
         //Deal damage based on distance fallen
         void TakeDamage()
         {
+            land.Play();
+
             float fall_distance = start_of_fall - transform.position.y;
 
             if (fall_distance > minimum_fall)
@@ -166,6 +177,35 @@ namespace Assignment
             climbing.enabled = true;
 
             respawning = false;
+        }
+
+        void CheckWalking()
+        {
+            if (GetComponent<Rigidbody>().velocity.magnitude > 0)
+            {
+                StartCoroutine(WalkingCycle());
+            }
+        }
+
+        IEnumerator WalkingCycle()
+        {
+            if (foot == "left" && is_walking)
+            {
+                is_walking = false;
+                left_foot.Play();
+                yield return new WaitForSeconds(0.75f);
+                foot = "right";
+                is_walking = true;
+            }
+
+            else if (foot == "right" && is_walking)
+            {
+                is_walking = false;
+                right_foot.Play();
+                yield return new WaitForSeconds(0.75f);
+                foot = "left";
+                is_walking = true;
+            }
         }
     }
 }
