@@ -36,6 +36,8 @@ namespace Assignment
             VibrationManager.Singleton.TriggerVibration(0.1f, index == 0
                 ? OVRInput.Controller.LTouch
                 : OVRInput.Controller.RTouch);
+            SoundSystem.PlayRandomSound(climbObject.transform.position,
+                "sound:FOOTSTEP_Trainers_Snow_Compact_Walk_Slow_RR1_mono", "sound:FOOTSTEP_Trainers_Snow_Compact_Walk_Slow_RR2_mono", "sound:FOOTSTEP_Trainers_Snow_Compact_Walk_Slow_RR3_mono");
         }
         private void OnReleaseClimbObject(eHandType handType)
         {
@@ -46,7 +48,7 @@ namespace Assignment
 
         // IsClimbing boolean maintainment - reflects climb-state of player. 
         [SerializeField]
-        private bool isClimbing;
+        public bool isClimbing;
         public Action onClimbStart;
         public Action onClimbEnd;
         private void Update()
@@ -68,6 +70,7 @@ namespace Assignment
             // Proceed only if climbing.
             if (!isClimbing)
                 return;
+            rb.velocity = Vector3.zero;
             for (int i = 0; i < 2; i++)
             {
                 if (!handStates[i])

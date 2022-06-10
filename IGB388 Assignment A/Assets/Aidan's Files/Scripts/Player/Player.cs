@@ -89,7 +89,7 @@ namespace Assignment
                 red_outline.a = (max_health - current_health) / max_health;
             }
 
-            CheckWalking();
+            HandleWalkingSound();
         }
 
         void OnClimbStart()
@@ -179,32 +179,37 @@ namespace Assignment
             respawning = false;
         }
 
-        void CheckWalking()
+        private bool IsWalking()
         {
-            if (GetComponent<Rigidbody>().velocity.magnitude > 0)
-            {
-                StartCoroutine(WalkingCycle());
-            }
+            return climbing.isClimbing == false && OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).magnitude > 0f;
         }
-
-        IEnumerator WalkingCycle()
+        private float stepTime = 1f;
+        private float stepTimer = 0f;
+        void HandleWalkingSound() // Called on update.
         {
-            if (foot == "left" && is_walking)
+            if (IsWalking())
             {
-                is_walking = false;
-                left_foot.Play();
-                yield return new WaitForSeconds(0.75f);
-                foot = "right";
-                is_walking = true;
-            }
-
-            else if (foot == "right" && is_walking)
-            {
-                is_walking = false;
-                right_foot.Play();
-                yield return new WaitForSeconds(0.75f);
-                foot = "left";
-                is_walking = true;
+                stepTimer += Time.deltaTime;
+                if (stepTimer >= stepTime)
+                {
+                    GameObject temp = new GameObject("Temp");
+                    temp.transform.position = transform.position;
+                    if (foot == "left")
+                    {
+                        temp.transform.Translate(-0.33f, -0.6f, 0f);
+                        foot = "right";
+                    }
+                    else
+                    {
+                        temp.transform.Translate(0.33f, -0.6f, 0f);
+                        foot = "left";
+                    }
+                    SoundSystem.PlayRandomSound(temp.transform.position,
+                        "sound:FOOTSTEP_Trainers_Gravel_Compact_Run_RR1_mono", "sound:FOOTSTEP_Trainers_Gravel_Compact_Run_RR2_mono", "sound:FOOTSTEP_Trainers_Gravel_Compact_Run_RR3_mono",
+                        "sound:FOOTSTEP_Trainers_Gravel_Compact_Run_RR4_mono", "sound:FOOTSTEP_Trainers_Gravel_Compact_Run_RR5_mono");
+                    Destroy(temp);
+                    stepTimer = 0f;
+                }
             }
         }
     }

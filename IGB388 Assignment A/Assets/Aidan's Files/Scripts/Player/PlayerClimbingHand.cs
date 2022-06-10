@@ -13,6 +13,7 @@ namespace Assignment
         [SerializeField]
         private List<GameObject> memory = new List<GameObject>();
         private const string CLIMB_OBJECT_TAG = "ClimbPoint";
+        public GameObject markerGO;
 
         private float stamina = 100f;
         private const float MAX_STAMINA = 100f;
@@ -48,6 +49,7 @@ namespace Assignment
         public Action<PlayerClimbing.eHandType, GameObject> onGrab_ClimbObject;
         public Action<PlayerClimbing.eHandType> onRelease_ClimbObject;
         private bool isGrabbingClimbObject = false;
+        private bool playedParticle = false;
 
         void Update()
         {
@@ -58,11 +60,35 @@ namespace Assignment
                 ? OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger)
                 : OVRInput.GetUp(OVRInput.Button.SecondaryHandTrigger);
 
+            // Position marker.
+            GameObject closestClimbObject = GetClosestClimbObject();
+            if (closestClimbObject == null || isGrabbingClimbObject)
+            {
+                markerGO.SetActive(false);
+                markerGO.GetComponent<ParticleSystem>().Stop();
+            }
+            else if (!isGrabbingClimbObject)
+            {
+                Vector3 dir = (closestClimbObject.transform.position - transform.position).normalized;
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, dir, out hit))
+                {
+                    markerGO.transform.position = hit.point;
+                    markerGO.transform.LookAt(transform.position);
+                    markerGO.transform.Translate(0f, 0f, 0.275f);
+                    markerGO.SetActive(true);
+                }
+                if (!playedParticle)
+                {
+                    markerGO.GetComponent<ParticleSystem>().Play();
+                    playedParticle = true;
+                }
+            }
+
             // If the hand has grabbed a climb object, fire an onGrab event. 
             if (!isGrabbingClimbObject && isHandTriggerPressed && memory.Count > 0 && stamina >= STAMINA_COST_TO_GRAB)
             {
                 isGrabbingClimbObject = true;
-                GameObject closestClimbObject = GetClosestClimbObject();
                 stamina -= STAMINA_COST_TO_GRAB;
                 onGrab_ClimbObject(handType, closestClimbObject);
             }
@@ -71,6 +97,7 @@ namespace Assignment
             {
                 isGrabbingClimbObject = false;
                 onRelease_ClimbObject(handType);
+                playedParticle = false;
             }
 
             HandleStamina();
