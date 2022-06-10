@@ -62,6 +62,7 @@ namespace Assignment
 
             // Position marker.
             GameObject closestClimbObject = GetClosestClimbObject();
+            Vector3 dustPos = Vector3.zero;
             if (closestClimbObject == null || isGrabbingClimbObject)
             {
                 markerGO.SetActive(false);
@@ -76,6 +77,7 @@ namespace Assignment
                     markerGO.transform.position = hit.point;
                     markerGO.transform.LookAt(transform.position);
                     markerGO.transform.Translate(0f, 0f, 0.275f);
+                    dustPos = markerGO.transform.position;
                     markerGO.SetActive(true);
                 }
                 if (!playedParticle)
@@ -91,6 +93,7 @@ namespace Assignment
                 isGrabbingClimbObject = true;
                 stamina -= STAMINA_COST_TO_GRAB;
                 onGrab_ClimbObject(handType, closestClimbObject);
+                ParticleSystems.Singleton.SpawnParticle(0, dustPos);
             }
             // If the hand has released a climb object, fire an onRelease event. 
             if (isGrabbingClimbObject && isHandTriggerReleased)
@@ -114,7 +117,7 @@ namespace Assignment
             if (isHandTriggerPressed)
             {
                 //Starts the ziplining action
-                GameObject.FindGameObjectWithTag("Zipline").GetComponent<Zipline>().Ziplining();
+                GC.Singleton.Zipline.GetComponent<Zipline>().Ziplining();
             }
         }
 

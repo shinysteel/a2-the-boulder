@@ -58,6 +58,7 @@ public class Zipline : MonoBehaviour
 
                 //Finish zipline event for water
                 finished_zipline = true;
+                GC.Singleton.Zipline.GetComponent<Zipline>().enabled = false;
             }
         }
     }

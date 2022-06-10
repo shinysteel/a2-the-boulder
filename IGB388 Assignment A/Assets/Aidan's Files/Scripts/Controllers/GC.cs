@@ -15,5 +15,6 @@ namespace Assignment
         }
 
         public GameObject Player;
+        public GameObject Zipline;
     }
 }
